@@ -1,0 +1,198 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="contactswarmModel.Store" Alias="Self" Provider="MySql.Data.MySqlClient" ProviderManifestToken="5.6" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityContainer Name="contactswarmModelStoreContainer">
+          <EntitySet Name="contact" EntityType="contactswarmModel.Store.contact" store:Type="Tables" Schema="contactswarm" />
+          <EntitySet Name="contact_type" EntityType="contactswarmModel.Store.contact_type" store:Type="Tables" Schema="contactswarm" />
+          <EntitySet Name="person" EntityType="contactswarmModel.Store.person" store:Type="Tables" Schema="contactswarm" />
+          <AssociationSet Name="person_id_key" Association="contactswarmModel.Store.person_id_key">
+            <End Role="person" EntitySet="person" />
+            <End Role="contact" EntitySet="contact" />
+          </AssociationSet>
+          <AssociationSet Name="type_id_key" Association="contactswarmModel.Store.type_id_key">
+            <End Role="contact_type" EntitySet="contact_type" />
+            <End Role="contact" EntitySet="contact" />
+          </AssociationSet>
+        </EntityContainer>
+        <EntityType Name="contact">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="uint" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="type" Type="uint" Nullable="false" />
+          <Property Name="person" Type="uint" Nullable="false" />
+          <Property Name="value" Type="varchar" Nullable="false" MaxLength="255" />
+        </EntityType>
+        <EntityType Name="contact_type">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="uint" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="name" Type="varchar" Nullable="false" MaxLength="45" />
+        </EntityType>
+        <EntityType Name="person">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="uint" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="name" Type="varchar" Nullable="false" MaxLength="255" />
+        </EntityType>
+        <Association Name="person_id_key">
+          <End Role="person" Type="contactswarmModel.Store.person" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="contact" Type="contactswarmModel.Store.contact" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="person">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="contact">
+              <PropertyRef Name="person" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="type_id_key">
+          <End Role="contact_type" Type="contactswarmModel.Store.contact_type" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="contact" Type="contactswarmModel.Store.contact" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="contact_type">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="contact">
+              <PropertyRef Name="type" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="ContactSwarmModel" Alias="Self" p1:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:p1="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityContainer Name="ContactSwarmEntities" p1:LazyLoadingEnabled="true">
+          <EntitySet Name="Contacts" EntityType="ContactSwarmModel.Contact" />
+          <EntitySet Name="ContactTypes" EntityType="ContactSwarmModel.ContactType" />
+          <EntitySet Name="Persons" EntityType="ContactSwarmModel.Person" />
+          <AssociationSet Name="person_id_key" Association="ContactSwarmModel.person_id_key">
+            <End Role="person" EntitySet="Persons" />
+            <End Role="contact" EntitySet="Contacts" />
+          </AssociationSet>
+          <AssociationSet Name="type_id_key" Association="ContactSwarmModel.type_id_key">
+            <End Role="contact_type" EntitySet="ContactTypes" />
+            <End Role="contact" EntitySet="Contacts" />
+          </AssociationSet>
+        </EntityContainer>
+        <EntityType Name="Contact">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int64" Nullable="false" p1:StoreGeneratedPattern="Identity" />
+          <Property Name="TypeId" Type="Int64" Nullable="false" />
+          <Property Name="PersonId" Type="Int64" Nullable="false" />
+          <NavigationProperty Name="Person" Relationship="ContactSwarmModel.person_id_key" FromRole="contact" ToRole="person" />
+          <NavigationProperty Name="Type" Relationship="ContactSwarmModel.type_id_key" FromRole="contact" ToRole="contact_type" />
+          <Property Type="String" Name="Value" Nullable="false" MaxLength="255" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="ContactType">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int64" Nullable="false" p1:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" Nullable="false" MaxLength="45" Unicode="true" FixedLength="false" />
+          <NavigationProperty Name="Contacts" Relationship="ContactSwarmModel.type_id_key" FromRole="contact_type" ToRole="contact" />
+        </EntityType>
+        <EntityType Name="Person">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int64" Nullable="false" p1:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" Nullable="false" MaxLength="255" Unicode="false" FixedLength="false" />
+          <NavigationProperty Name="Contacts" Relationship="ContactSwarmModel.person_id_key" FromRole="person" ToRole="contact" />
+        </EntityType>
+        <Association Name="person_id_key">
+          <End Role="person" Type="ContactSwarmModel.Person" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="contact" Type="ContactSwarmModel.Contact" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="person">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="contact">
+              <PropertyRef Name="PersonId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="type_id_key">
+          <End Role="contact_type" Type="ContactSwarmModel.ContactType" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="contact" Type="ContactSwarmModel.Contact" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="contact_type">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="contact">
+              <PropertyRef Name="TypeId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="contactswarmModelStoreContainer" CdmEntityContainer="ContactSwarmEntities">
+          <EntitySetMapping Name="Contacts">
+            <EntityTypeMapping TypeName="ContactSwarmModel.Contact">
+              <MappingFragment StoreEntitySet="contact">
+                <ScalarProperty Name="Value" ColumnName="value" />
+                <ScalarProperty Name="Id" ColumnName="id" />
+                <ScalarProperty Name="TypeId" ColumnName="type" />
+                <ScalarProperty Name="PersonId" ColumnName="person" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ContactTypes">
+            <EntityTypeMapping TypeName="ContactSwarmModel.ContactType">
+              <MappingFragment StoreEntitySet="contact_type">
+                <ScalarProperty Name="Id" ColumnName="id" />
+                <ScalarProperty Name="Name" ColumnName="name" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Persons">
+            <EntityTypeMapping TypeName="ContactSwarmModel.Person">
+              <MappingFragment StoreEntitySet="person">
+                <ScalarProperty Name="Id" ColumnName="id" />
+                <ScalarProperty Name="Name" ColumnName="name" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="False" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="True" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

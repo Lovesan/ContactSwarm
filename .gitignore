@@ -1,0 +1,14 @@
+bin
+obj
+*~
+*.o
+*.obj
+*.tmp
+*.diff
+*.patch
+*.swp
+*.pdb
+*.suo
+*.user
+*.sdf
+*.opensdf
